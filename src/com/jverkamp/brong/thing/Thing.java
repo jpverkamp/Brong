@@ -9,7 +9,7 @@ import org.jbox2d.dynamics.Body;
  */
 public abstract class Thing {
 	Body j2dBody;
-	
+
 	/**
 	 * Draw this thing with the given graphics object.
 	 * @param g2d Draw with me!

@@ -3,9 +3,6 @@ package com.jverkamp.brong.thing;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.geom.Point2D;
 import java.util.*;
 
 import org.jbox2d.collision.shapes.PolygonShape;
@@ -15,10 +12,9 @@ import org.jbox2d.dynamics.*;
 /**
  * Store the world and everything in it.
  */
-public class World implements KeyListener {
+public class World {
 	public List<Thing> Things;
 	public Dimension Bounds;
-	boolean[] Keys = new boolean[256]; 
 	
 	org.jbox2d.dynamics.World j2dWorld;
 	
@@ -57,8 +53,8 @@ public class World implements KeyListener {
 		for (int i = 0; i < 10; i++)
 			Things.add(new Ball(this, new Point((int) (r.nextDouble() * size.width), (int) (r.nextDouble() * size.height))));
 		
-		Things.add(new Paddle(new Point2D.Double(size.width / 2, 25), Paddle.MOVE_ON_AD));
-		Things.add(new Paddle(new Point2D.Double(size.width / 2, size.height - 25), Paddle.MOVE_ON_ARROWS));
+		Things.add(new Paddle(this, 25, Paddle.MovementMode.AD));
+		Things.add(new Paddle(this, size.height - 25, Paddle.MovementMode.Arrows));
 	}
 	
 	/**
@@ -76,33 +72,5 @@ public class World implements KeyListener {
 	public void draw(Graphics2D g2d) {
 		for (Thing t : Things) 
 			t.draw(g2d);
-	}
-
-	/**
-	 * Track when a key is pressed.
-	 */
-	@Override
-	public void keyPressed(KeyEvent e) {
-		int code = e.getKeyCode();
-		if (code >= 0 && code < Keys.length)
-			Keys[code] = true; 
-	}
-
-	/**
-	 * Track when a key is released.
-	 */
-	@Override
-	public void keyReleased(KeyEvent e) {
-		int code = e.getKeyCode();
-		if (code >= 0 && code < Keys.length)
-			Keys[code] = false;
-	}
-
-	/**
-	 * Ignore when a key is typed.
-	 */
-	@Override
-	public void keyTyped(KeyEvent e) {
-		
 	}
 }

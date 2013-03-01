@@ -6,18 +6,15 @@ import java.awt.Point;
 import java.util.Random;
 
 import org.jbox2d.collision.shapes.CircleShape;
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.BodyType;
-import org.jbox2d.dynamics.FixtureDef;
+import org.jbox2d.common.*;
+import org.jbox2d.dynamics.*;
 
 /**
  * Bouncy bouncy.
  */
 public class Ball extends Thing {
 	Body Body;
-	int Radius = 10;
+	float Radius = 5.0f;
 	
 	static Random r = new Random();
 	
@@ -41,7 +38,7 @@ public class Ball extends Thing {
         j2dBody.createFixture(fd);
         j2dBody.setUserData(this);
         
-        j2dBody.setLinearVelocity(new Vec2(r.nextFloat() * 500, r.nextFloat() * 500));
+        j2dBody.setLinearVelocity(new Vec2(r.nextFloat() * 500 - 250, r.nextFloat() * 500 - 250));
 	}
 
 	/**
@@ -54,8 +51,8 @@ public class Ball extends Thing {
 		g2d.fillOval(
 			(int) (j2dBody.getPosition().x - Radius),
 			(int) (j2dBody.getPosition().y - Radius),
-			Radius * 2,
-			Radius * 2
+			(int) (Radius * 2),
+			(int) (Radius * 2)
 		);
 	}
 }

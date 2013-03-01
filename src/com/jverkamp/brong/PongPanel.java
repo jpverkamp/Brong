@@ -24,7 +24,7 @@ public class PongPanel extends JPanel {
 	
 	World Small;
 	int Frames;
-	double FPS;
+	int FPS;
 	
 	/**
 	 * Create a default sized panel.
@@ -36,7 +36,6 @@ public class PongPanel extends JPanel {
 		setPreferredSize(getSize());
 
 		Small = new World(getSize()); // afterall
-		this.addKeyListener(Small);
 		
 		final long start = System.currentTimeMillis();
 		final PongPanel me = this;
@@ -54,7 +53,7 @@ public class PongPanel extends JPanel {
 					Small.update(time);
 					me.repaint(); 
 					
-					FPS = (1000.0 * Frames / (now - start));
+					FPS = (int) (1000.0 * Frames / (now - start));
 					then = now;
 					
 					try {
