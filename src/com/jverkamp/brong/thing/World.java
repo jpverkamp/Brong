@@ -66,16 +66,6 @@ public class World extends Thing implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int code = e.getKeyCode();
-		
-		if (code == KeyEvent.VK_A)
-			System.out.println("A pressed");
-		else if (code == KeyEvent.VK_D)
-			System.out.println("D pressed");
-		else if (code == KeyEvent.VK_LEFT)
-			System.out.println("Left pressed");
-		else if (code == KeyEvent.VK_RIGHT)
-			System.out.println("Right pressed");
-		
 		if (code >= 0 && code < Keys.length)
 			Keys[code] = true; 
 	}

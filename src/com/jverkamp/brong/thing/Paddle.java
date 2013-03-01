@@ -10,6 +10,7 @@ import java.awt.geom.Point2D;
  * Create a new paddle.
  */
 public class Paddle extends Thing {
+	public final static double FRICTION = 0.9; // 1.0 is no friction, 0 is maximum
 	public final static double ACCELERATION = 10.0;
 	public final static double MAX_VELOCITY = 100.0;
 	public final static Dimension SIZE = new Dimension(50, 10);
@@ -19,8 +20,6 @@ public class Paddle extends Thing {
 	int MovementMode;
 	
 	Point2D.Double Velocity;
-	Point2D.Double Acceleration;
-
 	
 	/**
 	 * Create a new paddle.
@@ -31,7 +30,6 @@ public class Paddle extends Thing {
 		super(center);
 		MovementMode = movementMode;
 		Velocity = new Point2D.Double(0, 0);
-		Acceleration = new Point2D.Double(0, 0);
 	}
 	
 	/**
@@ -44,15 +42,12 @@ public class Paddle extends Thing {
 		// Check if our movement mode was triggered.
 		if (MovementMode == MOVE_ON_ARROWS && world.Keys[KeyEvent.VK_LEFT] 
 				|| MovementMode == MOVE_ON_AD && world.Keys[KeyEvent.VK_A])
-			Acceleration.x = ACCELERATION;
+			Velocity.x -= ACCELERATION;
 		else if (MovementMode == MOVE_ON_ARROWS && world.Keys[KeyEvent.VK_RIGHT] 
 				|| MovementMode == MOVE_ON_AD && world.Keys[KeyEvent.VK_D])
-			Acceleration.x = ACCELERATION;
+			Velocity.x += ACCELERATION;
 		else
-			Acceleration.x = 0;
-		
-		// Update velocity.
-		Velocity.x += Acceleration.x * time;
+			Velocity.x *= FRICTION; 
 		
 		// Update position.
 		Center.x += Velocity.x * time;
