@@ -45,6 +45,8 @@ public class Paddle extends Thing implements KeyEventDispatcher {
 		BodyDef bd = new BodyDef();
         bd.type = BodyType.DYNAMIC;
         bd.position.set(world.Bounds.width / 2, y);
+        bd.linearDamping = 0.0f;
+        bd.angularDamping = 0.01f;
         
         FixtureDef fd = new FixtureDef();
         fd.shape = new PolygonShape();

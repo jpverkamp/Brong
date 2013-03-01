@@ -23,11 +23,13 @@ public class Ball extends Thing {
         BodyDef bd = new BodyDef();
         bd.type = BodyType.DYNAMIC;
         bd.position.set((float) center.x, (float) center.y);
+        bd.linearDamping = 0.0f;
+        bd.angularDamping = 0.01f;
         
         FixtureDef fd = new FixtureDef();
         fd.shape = new CircleShape();
         fd.shape.m_radius = Radius;
-        fd.density = 0.0f;
+        fd.density = 100.0f;
         fd.friction = 0.0f;        
         fd.restitution = 1.0f;
         

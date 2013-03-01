@@ -29,6 +29,7 @@ public class World implements ContactListener {
 	public World(Dimension size) {
 		// Create the world
 		j2dWorld = new org.jbox2d.dynamics.World(new Vec2(0, 0), false);
+		j2dWorld.clearForces();
 		
 		// Create the border
 		BodyDef bd = new BodyDef();
@@ -51,17 +52,18 @@ public class World implements ContactListener {
 		Things = new ArrayList<Thing>();
 		Bounds = size;
 		
-		Things.add(new Ball(this, new Point(size.width / 2, size.height / 2)));
-		
-		Random r = new Random();
 		for (int i = 0; i < 10; i++)
-			Things.add(new Ball(this, new Point((int) (r.nextDouble() * size.width), (int) (r.nextDouble() * size.height))));
+			Things.add(
+				new Block(this, 
+					new Point(
+						(int) (Thing.Random.nextDouble() * size.width), 
+						(int) (Thing.Random.nextDouble() * size.height)
+					)
+				)
+			);
 		
-		for (int i = 0; i < 10; i++)
-			Things.add(new Block(this, new Point((int) (r.nextDouble() * size.width), (int) (r.nextDouble() * size.height))));
-		
-		Things.add(new Paddle(this, 25, Paddle.MovementMode.AD));
-		Things.add(new Paddle(this, size.height - 25, Paddle.MovementMode.Arrows));
+		Things.add(new PaddleWithBall(this, 25, Paddle.MovementMode.AD));
+		Things.add(new PaddleWithBall(this, size.height - 25, Paddle.MovementMode.Arrows));
 	}
 	
 	/**
@@ -69,7 +71,7 @@ public class World implements ContactListener {
 	 * @param time Seconds since last update
 	 */
 	public void update(float time) {
-		j2dWorld.step(time, 6, 2);
+		j2dWorld.step(time, 1, 1);
 	}	
 	
 	/**
@@ -83,17 +85,24 @@ public class World implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) {
-		Block hit = null;
-		if (contact.getFixtureA().getBody().getUserData() instanceof Block)
-			hit = (Block) contact.getFixtureA().getBody().getUserData();
-		else if (contact.getFixtureB().getBody().getUserData() instanceof Block)
-			hit = (Block) contact.getFixtureB().getBody().getUserData();
+		Block block = null;
+		Thing other = null;
 		
-		if (hit == null) 
+		if (contact.getFixtureA().getBody().getUserData() instanceof Block) {
+			block = (Block) contact.getFixtureA().getBody().getUserData();
+			other = (Thing) contact.getFixtureB().getBody().getUserData();
+		} else if (contact.getFixtureB().getBody().getUserData() instanceof Block) {
+			block = (Block) contact.getFixtureB().getBody().getUserData();
+			other = (Thing) contact.getFixtureA().getBody().getUserData();
+		}
+		
+		if (block == null) 
 			return;
 		
-		Things.remove(hit);
-		j2dWorld.destroyBody(hit.j2dBody);
+		System.out.println(block + " was hit by " + (other == null ? "???" : other + " moving at " + other.j2dBody.getLinearVelocity()));
+		
+		Things.remove(block);
+		j2dWorld.destroyBody(block.j2dBody);
 	}
 
 	@Override public void beginContact(Contact contact) {}
