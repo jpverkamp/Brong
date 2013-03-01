@@ -48,7 +48,7 @@ public class PongPanel extends JPanel {
 					me.requestFocusInWindow();
 					
 					long now = System.currentTimeMillis();
-					double time = 1.0 * (now - then) / 1000.0;
+					float time = 1.0f * (now - then) / 1000.0f;
 					
 					Frames += 1;
 					Small.update(time);

@@ -3,7 +3,6 @@ package com.jverkamp.brong.thing;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 
 /**
@@ -27,46 +26,18 @@ public class Paddle extends Thing {
 	 * @param movementMode Move on arrows or A/D.
 	 */
 	public Paddle(Point2D.Double center, int movementMode) {
-		super(center);
 		MovementMode = movementMode;
 		Velocity = new Point2D.Double(0, 0);
-	}
-	
-	/**
-	 * Update the paddle.
-	 * @param world The world the paddle is in.
-	 * @param time The number of seconds since last update.
-	 */
-	@Override
-	public void update(World world, double time) {
-		// Check if our movement mode was triggered.
-		if (MovementMode == MOVE_ON_ARROWS && world.Keys[KeyEvent.VK_LEFT] 
-				|| MovementMode == MOVE_ON_AD && world.Keys[KeyEvent.VK_A])
-			Velocity.x -= ACCELERATION;
-		else if (MovementMode == MOVE_ON_ARROWS && world.Keys[KeyEvent.VK_RIGHT] 
-				|| MovementMode == MOVE_ON_AD && world.Keys[KeyEvent.VK_D])
-			Velocity.x += ACCELERATION;
-		else
-			Velocity.x *= FRICTION; 
-		
-		// Update position.
-		Center.x += Velocity.x * time;
-		
-		// Boundry checking, bounce off of walls.
-		if (Center.x - SIZE.width / 2 < 0 || Center.x + SIZE.width / 2 >= world.Bounds.width) {
-			Velocity.x *= -1;
-			Center.x += Velocity.x * time;
-		}	 
 	}
 
 	@Override
 	public void draw(Graphics2D g2d) {
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(
-			(int) (Center.x - SIZE.width / 2), 
-			(int) (Center.y - SIZE.height / 2), 
-			SIZE.width,
-			SIZE.height
-		);
+//		g2d.fillRect(
+//			(int) (Center.x - SIZE.width / 2), 
+//			(int) (Center.y - SIZE.height / 2), 
+//			SIZE.width,
+//			SIZE.height
+//		);
 	}
 }
