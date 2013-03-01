@@ -106,16 +106,6 @@ public class Paddle extends Thing implements KeyEventDispatcher {
 		// Are we starting to move or stopping?
 		boolean pressed = (id == KeyEvent.KEY_PRESSED);
 		
-		System.out.println(
-			"> mode = " + Mode + 
-			", id = " + id + 
-			", code = " + code + 
-			", pressed = " + pressed + 
-			", left = " + left + 
-			", right = " + right
-		);
-		
-		
 		// Apply the velocity.
 		if (!pressed) {
 			j2dBody.setLinearVelocity(new Vec2(0, 0));
@@ -126,8 +116,6 @@ public class Paddle extends Thing implements KeyEventDispatcher {
 			j2dBody.setLinearVelocity(new Vec2(IMPULSE, 0));
 //			j2dBody.applyLinearImpulse(new Vec2(IMPULSE, 0), j2dBody.getPosition());
 		}
-		
-		System.out.println("new velocity should be " + j2dBody.getLinearVelocity());
 		
 		// Done.
 		return false;

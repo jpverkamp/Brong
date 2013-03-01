@@ -3,7 +3,6 @@ package com.jverkamp.brong.thing;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.util.Random;
 
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.*;
@@ -15,8 +14,6 @@ import org.jbox2d.dynamics.*;
 public class Ball extends Thing {
 	Body Body;
 	float Radius = 5.0f;
-	
-	static Random r = new Random();
 	
 	/**
 	 * Create a new ball at the given point.
@@ -38,7 +35,7 @@ public class Ball extends Thing {
         j2dBody.createFixture(fd);
         j2dBody.setUserData(this);
         
-        j2dBody.setLinearVelocity(new Vec2(r.nextFloat() * 500 - 250, r.nextFloat() * 500 - 250));
+        j2dBody.setLinearVelocity(new Vec2(Random.nextFloat() * 1000 - 500, Random.nextFloat() * 1000 - 500));
 	}
 
 	/**

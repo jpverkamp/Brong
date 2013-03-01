@@ -5,14 +5,18 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.*;
 
+import org.jbox2d.callbacks.ContactImpulse;
+import org.jbox2d.callbacks.ContactListener;
+import org.jbox2d.collision.Manifold;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
+import org.jbox2d.dynamics.contacts.Contact;
 
 /**
  * Store the world and everything in it.
  */
-public class World {
+public class World implements ContactListener {
 	public List<Thing> Things;
 	public Dimension Bounds;
 	
@@ -23,27 +27,27 @@ public class World {
 	 * @param size The world's size.
 	 */
 	public World(Dimension size) {
+		// Create the world
 		j2dWorld = new org.jbox2d.dynamics.World(new Vec2(0, 0), false);
 		
+		// Create the border
 		BodyDef bd = new BodyDef();
         bd.position.set(0, 0);
-        
         Body body = j2dWorld.createBody(bd);
-        
         PolygonShape edge = new PolygonShape();
-        
         edge.setAsEdge(new Vec2(0, 0), new Vec2(size.width, 0));
         body.createFixture(edge, 0);
-        
         edge.setAsEdge(new Vec2(0, 0), new Vec2(0, size.height));
         body.createFixture(edge, 0);
-        
         edge.setAsEdge(new Vec2(size.width, 0), new Vec2(size.width, size.height));
         body.createFixture(edge, 0);
-        
         edge.setAsEdge(new Vec2(0, size.height), new Vec2(size.width, size.height));
         body.createFixture(edge, 0);
 		
+        // Add custom collision handling
+        j2dWorld.setContactListener(this);
+        
+        // Create the level
 		Things = new ArrayList<Thing>();
 		Bounds = size;
 		
@@ -52,6 +56,9 @@ public class World {
 		Random r = new Random();
 		for (int i = 0; i < 10; i++)
 			Things.add(new Ball(this, new Point((int) (r.nextDouble() * size.width), (int) (r.nextDouble() * size.height))));
+		
+		for (int i = 0; i < 10; i++)
+			Things.add(new Block(this, new Point((int) (r.nextDouble() * size.width), (int) (r.nextDouble() * size.height))));
 		
 		Things.add(new Paddle(this, 25, Paddle.MovementMode.AD));
 		Things.add(new Paddle(this, size.height - 25, Paddle.MovementMode.Arrows));
@@ -73,4 +80,23 @@ public class World {
 		for (Thing t : Things) 
 			t.draw(g2d);
 	}
+
+	@Override
+	public void endContact(Contact contact) {
+		Block hit = null;
+		if (contact.getFixtureA().getBody().getUserData() instanceof Block)
+			hit = (Block) contact.getFixtureA().getBody().getUserData();
+		else if (contact.getFixtureB().getBody().getUserData() instanceof Block)
+			hit = (Block) contact.getFixtureB().getBody().getUserData();
+		
+		if (hit == null) 
+			return;
+		
+		Things.remove(hit);
+		j2dWorld.destroyBody(hit.j2dBody);
+	}
+
+	@Override public void beginContact(Contact contact) {}
+	@Override public void postSolve(Contact contact, ContactImpulse impulse) {}
+	@Override public void preSolve(Contact contact, Manifold manifold) {}
 }
