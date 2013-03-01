@@ -36,6 +36,7 @@ public class PongPanel extends JPanel {
 		setPreferredSize(getSize());
 
 		Small = new World(getSize()); // afterall
+		this.addKeyListener(Small);
 		
 		final long start = System.currentTimeMillis();
 		final PongPanel me = this;
@@ -43,6 +44,9 @@ public class PongPanel extends JPanel {
 			public void run() {
 				long then = System.currentTimeMillis();
 				while (true) {
+					me.requestFocus();
+					me.requestFocusInWindow();
+					
 					long now = System.currentTimeMillis();
 					double time = 1.0 * (now - then) / 1000.0;
 					
